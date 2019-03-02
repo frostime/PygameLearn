@@ -4,8 +4,12 @@ pygame初体验
 import pygame
 from pygame.locals import *
 
-最开始: pygame.init(), 初始化pygame,为使用硬件做准备
-退出游戏: sys.exit()
+最开始:
+    pygame.init(), 初始化pygame,为使用硬件做准备
+退出游戏:
+    两步
+    pygame.quit(), 和init完全相反的功能，退出前应该调用它
+    sys.exit(), 退出程序
 
 pygame.display:
     访问显示设备相关
@@ -50,6 +54,7 @@ def main():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
                 exit()
         screen.blit(background, (0, 0))
         x, y = pygame.mouse.get_pos()
