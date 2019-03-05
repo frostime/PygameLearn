@@ -1,18 +1,35 @@
 """
+本节讨论pygame中事件的问题
+首先会给出三种事件获取方式: get(), wait(), poll()的功能和区别
+然后会演示一下鼠标和键盘事件的处理
+最后讲一下用户自定义事件
+
 pygame.event:
     事件模块
     class EventType:
         事件类型, 有一个最常用的属性type(int类型)，代表了事件的类型
         有哪些事件类型在pygame中定义的有，例如pygame.QUIT,
         某些事件还会有一些其他属性, 常用的事件列在下面:
-        Event            Attribute
-        QUIT             none
-        ACTIVEEVENT      gain, state
-        KEYDOWN          unicode, key, mod
-        KEYUP            key, mod
-        MOUSEMOTION      pos, rel, buttons
-        MOUSEBUTTONUP    pos, button
-        MOUSEBUTTONDOWN  pos, button
+        type             int    attr
+        QUIT             12     none
+        ACTIVEEVENT      1      gain, state
+        KEYDOWN          2      unicode, key, mod
+        KEYUP            3      key, mod
+        MOUSEMOTION      4      pos, rel, buttons
+        MOUSEBUTTONUP    5      pos, button
+        MOUSEBUTTONDOWN  6      pos, button
+        JOYAXISMOTION    7      joy, axis, value
+        JOYBALLMOTION    8      joy, ball, rel
+        JOYHATMOTION     9      joy, hat, value
+        JOYBUTTONUP      11     joy, button
+        JOYBUTTONDOWN    10     joy, button
+        VIDEORESIZE      16     size, w, h
+        VIDEOEXPOSE      17     none
+        USEREVENT        24     code
+    class Event:
+        Event(type, dict) -> EventType instance
+        Event(type, **attributes) -> EventType instance
+        定义一个事件
     get() -> Eventlist:
         一次性将事件队列中所有事件出队列，以列表形式返回
     wait() -> EventType instance:
@@ -147,9 +164,53 @@ def testFilter():
         pygame.display.update()
 
 
+def testDIYEvent():
+    """
+    自定义一个事件
+    1. 使用Event定义一个事件, 注意type是一个int
+    如果希望自定义一个type的话有必要设置为大于24的数字，以便于同pygame中定义过的区分
+    2. 用pygame.event.post将event插入事件队列中
+    3. 处理事件
+    """
+    pygame.init()
+    EVNET1 = 25
+    EVENT2 = 26
+    event1 = pygame.event.Event(EVNET1, message="Bad cat!")
+    event2 = pygame.event.Event(EVENT2, {'Val': 1})
+    pygame.event.post(event1)
+    pygame.event.post(event2)
+    # 然后获得它
+    for event in pygame.event.get():
+        if event.type == EVNET1:
+            print(event.message)
+        elif event.type == EVENT2:
+            print(event.Val)
+    pygame.quit()
+
+
+def eventVal():
+    print(QUIT)
+    print(ACTIVEEVENT)
+    print(KEYDOWN)
+    print(KEYUP)
+    print(MOUSEMOTION)
+    print(MOUSEBUTTONUP)
+    print(MOUSEBUTTONDOWN)
+    print(JOYAXISMOTION)
+    print(JOYBALLMOTION)
+    print(JOYHATMOTION)
+    print(JOYBUTTONUP)
+    print(JOYBUTTONDOWN)
+    print(VIDEORESIZE)
+    print(VIDEOEXPOSE)
+    print(USEREVENT)
+
+
 def main():
     # testWait()
-    testKeyboard()
+    # eventVal()
+    testDIYEvent()
+    
 
 
 if __name__ == "__main__":
