@@ -21,22 +21,32 @@ class Vector(np.ndarray):
         norm = np.linalg.norm(self)
         return norm
 
-    def rotate2D(self, theta):
-        """2D向量逆时针旋转theta度"""
+    def rotate2D(self, degree):
+        """2D向量逆时针旋转degree度"""
         if self.dim != 2:
             raise Exception("Not 2D!")
         # 角度转为弧度
-        theta = (theta * np.pi) / 180
-        c = np.cos(theta)
-        s = np.sin(theta)
+        radian = np.deg2rad(degree)
+        c = np.cos(radian)
+        s = np.sin(radian)
         a, b = self[0], self[1]
         x = a * c - b * s
         y = a * s + b * c
         return Vector([x, y])
 
     def angle(self, v):
-        """同向量v之间的角度"""
-        return Vector.AngleBetween(self, v)
+        """同向量v之间的角度
+
+        在向量为2D时行为会不同于AngleBetween, 这时angle方法会关注向量的顺序位置
+        准确而言，这种情况下计算的是从self到v经过的角度, 返回值在[-180, 180]之间
+        正数表示逆时针方向
+        """
+        degree = Vector.AngleBetween(self, v)
+        if self.dim == 2:
+            cross = np.cross(self, v)
+            if cross < 0:
+                degree = -degree
+        return degree
 
     def __str__(self):
         s = []
@@ -56,6 +66,25 @@ class Vector(np.ndarray):
 
     @staticmethod
     def AngleBetween(v1, v2):
-        """计算两个向量夹角, 返回单位为度"""
+        """计算两个向量夹角, 返回单位为度, 返回值在[0, 180]之间"""
         cos = (v1 * v2) / (v1.norm() * v2.norm())
-        return np.arccos(cos) * 180 / np.pi
+        # 由于计算精度的原因，可能存在cos = 1.000001之类的情况
+        # 这会使得arccos无法正常运行
+        if cos >= 1:
+            cos = 1
+        elif cos <= -1:
+            cos = -1
+        radian = np.arccos(cos)
+        return np.rad2deg(radian)
+
+
+def test():
+    v = Vector([1, 0])
+    for i in range(0, 362, 2):
+        u = v.rotate2D(i)
+        a = v.angle(u)
+        print('旋转{}, 得到{}, 夹角{}'.format(i, u, a))
+
+
+if __name__ == '__main__':
+    test()
