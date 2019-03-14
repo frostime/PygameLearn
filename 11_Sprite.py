@@ -22,8 +22,11 @@ pygame.sprite:
         sprites() -> sprite_list
         add(*sprites) -> None
         remove(*sprites) -> None
-        update(*args) -> None
-        draw(Surface) -> None
+        update(*args) -> None:
+            自动调用所有Group中的Sprite
+            传给update的参数会被传给每一个Sprite的update
+        draw(Surface) -> None:
+            将每个sprite绘制到Surface上面
 """
 
 import pygame

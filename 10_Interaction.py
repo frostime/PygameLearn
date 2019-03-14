@@ -6,11 +6,13 @@
 此外我们还可以使用pygame.transform对图像进行旋转、拉伸等变换，但是注意一点
 在变换是一定要针对原Surface进行变换，不要对变换后的Surface再变换，否则会失真
 """
+import random
+
+import numpy as np
 import pygame
 from pygame.locals import *
+
 from vector import Vector
-import random
-import numpy as np
 
 
 class StarSkyBackground(object):

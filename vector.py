@@ -1,3 +1,4 @@
+# pylint: disable=assignment-from-no-return
 """
 向量类
 """
@@ -15,7 +16,7 @@ class Vector(np.ndarray):
         if norm != 0:
             return self / norm
         else:
-            return norm.copy()
+            return self.copy()
 
     def norm(self):
         norm = np.linalg.norm(self)
@@ -56,8 +57,11 @@ class Vector(np.ndarray):
         return '(' + ', '.join(s) + ')'
 
     def __mul__(self, v):
-        """内积"""
-        return Vector.InnerProd(self, v)
+        """内积或普通乘法"""
+        if isinstance(v, Vector):
+            return Vector.InnerProd(self, v)
+        else:
+            return Vector(np.multiply(self, v))
 
     @staticmethod
     def InnerProd(v1, v2):
@@ -77,13 +81,38 @@ class Vector(np.ndarray):
         radian = np.arccos(cos)
         return np.rad2deg(radian)
 
+    @property
+    def x(self):
+        return self[0]
+
+    @property
+    def y(self):
+        return self[1]
+
+    @x.setter
+    def x(self, val):
+        if not isinstance(val, float):
+            if isinstance(val, int):
+                val = float(val)
+            else:
+                raise Exception('Type Error')
+        self[0] = val
+
+    @y.setter
+    def y(self, val):
+        if not isinstance(val, float):
+            if isinstance(val, int):
+                val = float(val)
+            else:
+                raise Exception('Type Error')
+        self[1] = val
+
 
 def test():
-    v = Vector([1, 0])
-    for i in range(0, 362, 2):
-        u = v.rotate2D(i)
-        a = v.angle(u)
-        print('旋转{}, 得到{}, 夹角{}'.format(i, u, a))
+    v = Vector([1, 5])
+    u = Vector([2, 3])
+    print(v * 3)
+    print(v * u)
 
 
 if __name__ == '__main__':
