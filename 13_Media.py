@@ -7,7 +7,7 @@ SCREEN_SIZE = (640, 480)
 # 重力因子，实际上是单位 像素/平方秒
 GRAVITY = 250.0
 # 弹力系数，不要超过1!
-BOUNCINESS = 0.7
+BOUNCINESS = 2
 
 
 def stero_pan(x_coord, screen_width):
