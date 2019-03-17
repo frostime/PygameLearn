@@ -2,10 +2,10 @@
 """
 基于pygame的生命游戏
 """
-import pygame
 import sys
+
 import numpy as np
-import time
+import pygame
 
 
 class Game(object):
@@ -130,11 +130,10 @@ def byHandInit(game):
 
 
 def main():
-    game = Game((720, 720), (180, 180), FPS=10)
-    # randomInit(game, 0.1)
-    oneByOneInit(game)
+    game = Game((720, 720), (180, 180), FPS=40)
+    randomInit(game, 0.2)
+    # oneByOneInit(game)
     # crossInit(game, 40)
-    # game = Game((720, 720), (72, 72), FPS=20)
     # byHandInit(game)
     game.run()
 
