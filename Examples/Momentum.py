@@ -164,7 +164,7 @@ class Game(object):
 
 
 def main():
-    game = Game((800, 300), FPS=200, bigMass=20, v=200)
+    game = Game((800, 300), FPS=200, bigMass=100, v=200)
     game.run()
 
 
